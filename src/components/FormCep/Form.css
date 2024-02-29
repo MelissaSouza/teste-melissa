@@ -1,0 +1,123 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #002;
+
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.FormCep {
+  max-width: 700px;
+  width: 90%;
+  margin: 50px auto;
+  padding: 40px;
+  padding-bottom: 0;
+  background: #e5e5e5;
+  border-radius: 8px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input,
+select {
+  width: 100%;
+  background: #fff;
+  border: 3px solid transparent;
+  border-radius: 3px;
+  height: 45px;
+  line-height: 45px;
+  transition: 0.3s ease all;
+}
+
+input:focus,
+select:focus {
+  border: 3px solid #0075ff;
+  outline: none;
+  box-shadow: 3px 0px 30px rgba(163, 163, 163, 0.4);
+}
+
+.three {
+  display: grid;
+  grid-template-columns: 20% 1fr 20%;
+  grid-template-rows: 1fr;
+  gap: 5px;
+}
+.two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 5px;
+}
+.onet {
+  display: grid;
+  grid-template-columns: 1fr 12%;
+  grid-template-rows: 1fr;
+  gap: 5px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  gap: 5px;
+}
+
+button[type="reset"] {
+  background-color: tomato;
+}
+button {
+  height: 45px;
+  line-height: 45px;
+  width: 48%;
+  margin: 1%;
+  background: #4caf50;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: 0.1s ease all;
+}
+button:disabled {
+  background: #888;
+  cursor: not-allowed;
+}
+
+button:not(button:disabled):hover {
+  box-shadow: 3px 0px 30px rgba(163, 163, 163, 1);
+}
+footer {
+  padding: 0;
+  margin: 0;
+  margin-top: 40px;
+  text-align: center;
+  font-size: 0.8rem;
+}
+footer a {
+  text-decoration: none;
+  color: #000;
+}
+.errorMessage {
+  color: #df4759;
+  text-align: center;
+  margin-bottom: 1em;
+  background-color: rgba(141, 141, 141, 0.133);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 600px) {
+  .three,
+  .two {
+    display: block;
+  }
+}
