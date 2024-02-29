@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./Form.css";
 
 export default function FormCep() {
   const [nomeCompleto, setNomeCompleto] = useState("");
@@ -38,12 +39,6 @@ export default function FormCep() {
     e.target.style.border = "3px solid transparent";
   }
 
-  function wrongCEP() {
-    const cep = document.querySelector("[name='cep']");
-    cep.style.border = "3px solid #df4759";
-    limpar();
-  }
-
   function verificaCep(cep) {
     setIsValid(false);
     fetch(`https://viacep.com.br/ws/${cep}/json`)
@@ -58,9 +53,6 @@ export default function FormCep() {
           localStorage.setItem("Cep", cep);
           setNewAddress("Sim");
         } else {
-          setLogradouro("");
-          setBairro("");
-          wrongCEP();
           setNewAddress("Não");
         }
       })
@@ -71,7 +63,6 @@ export default function FormCep() {
 
     const cep = value?.replace(/[^0-9]/g, "");
     if (cep?.length !== 8) {
-      wrongCEP();
       return;
     }
     verificaCep(cep);
@@ -122,84 +113,46 @@ export default function FormCep() {
         <div className="two">
           <div className="container">
             <label>Nome Completo</label>
-            <input
-              onChange={(e) => setNomeCompleto(e.target.value)}
-              value={nomeCompleto}
-              name="nomeCompleto"
-              type="text"
-              required
-            />
+            <input onChange={(e) => setNomeCompleto(e.target.value)} value={nomeCompleto} name="nomeCompleto" type="text" />
           </div>
 
           <div className="container">
             <label>Apelido</label>
-            <input
-              onChange={(e) => setApelido(e.target.value)}
-              value={apelido}
-              name="apelido"
-              type="text"
-            />
+            <input onChange={(e) => setApelido(e.target.value)} value={apelido} name="apelido" type="text"/>
           </div>
         </div>
 
         <div className="three">
           <div className="container">
             <label>Cep</label>
-            <input
-              onChange={onFocusCep}
-              onBlur={onBlurCep}
-              placeholder="00000-000"
-              name="cep"
-              type="text"
-            ></input>
+            <input onChange={onFocusCep} onBlur={onBlurCep} placeholder="00000-000" name="cep" type="text"/>
           </div>
 
           <div className="container">
             <label>Logradouro</label>
-            <input
-              value={logradouro}
-              name="logradouro"
-              readOnly={true}
-              type="text"
-            ></input>
+            <input value={logradouro} name="logradouro" readOnly={true} type="text"/>
           </div>
 
           <div className="container">
             <label>Número</label>
-            <input
-              onChange={isEmpty}
-              readOnly={!isValid}
-              name="numero"
-              type="text"
-            ></input>
+            <input onChange={isEmpty} readOnly={!isValid} name="numero" type="text"/>
           </div>
         </div>
         <div className="two">
           <div className="container">
-            <label>Complemento</label>
-            <input readOnly={!isValid} name="complemento" type="text"></input>
+            <label>Complemento </label>
+            <input readOnly={!isValid} name="complemento" type="text"/>
           </div>
 
           <div className="container">
             <label>Bairro</label>
-
-            <input
-              readOnly={true}
-              value={bairro}
-              name="bairro"
-              type="text"
-            ></input>
+            <input readOnly={true} value={bairro} name="bairro" type="text"/>
           </div>
         </div>
-        <div className="onet">
+        <div className="one">
           <div className="container">
             <label>Cidade</label>
-            <input
-              readOnly={true}
-              value={cidade}
-              name="cidade"
-              type="text"
-            ></input>
+            <input readOnly={true} value={cidade} name="cidade" type="text"/>
           </div>
           <div className="container">
             <label>UF</label>
@@ -240,7 +193,7 @@ export default function FormCep() {
           <button onClick={limpar} type="reset">
             Reset
           </button>
-          <button type="submit" disabled={!isValid || !numero}>
+          <button type="submit" disabled={!isValid || !numero || !nomeCompleto}>
             Enviar
           </button>
         </div>
