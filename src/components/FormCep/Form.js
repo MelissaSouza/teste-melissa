@@ -9,23 +9,31 @@ export default function FormCep() {
   const [uf, setUf] = useState("");
   const [numero, setNumero] = useState("");
   const [complemento, setComplemento] = useState("");
-  const [isValid, setisValid] = useState(false);
-  const [fetchError, setFetchError] = useState(false);
+  const [isValid, setIsValid] = useState(false);
+  const [newAddress, setNewAddress] = useState("");
+  const [formReset, setFormReset] = useState(false);
 
   function limpar() {
+    setNomeCompleto("");
+    setApelido("");
+    setLogradouro("");
     setBairro("");
     setCidade("");
-    setLogradouro("");
     setUf("");
+    setNumero("");
+    setComplemento("");
+    setNewAddress("");
+    setFormReset(true);
   }
 
   function isEmpty(e) {
     const { value } = e.target;
 
-    if (value?.split() !== "") {
+    if (value !== "") {
       setNumero(value);
     }
   }
+
   function onFocusCep(e) {
     e.target.style.border = "3px solid transparent";
   }
@@ -35,29 +43,28 @@ export default function FormCep() {
     cep.style.border = "3px solid #df4759";
     limpar();
   }
-  
-function verficaCep(cep) {
-  setisValid(false);
-  fetch(`https://viacep.com.br/ws/${cep}/json`)
-    .then((res) => res.json())
-    .then((data) => {
-      setLogradouro(data.logradouro);
-      setCidade(data.localidade);
-      setBairro(data.bairro);
-      setUf(data.uf);
 
-      if (!data.erro) {
-        setisValid(true);
-
-        // Exportar CEP para o localStorage
-        localStorage.setItem("Cep", cep);
-      } else {
-        wrongCEP();
-      }
-      setFetchError(false);
-    })
-    .catch((err) => setFetchError(true));
-}
+  function verificaCep(cep) {
+    setIsValid(false);
+    fetch(`https://viacep.com.br/ws/${cep}/json`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.erro) {
+          setLogradouro(data.logradouro || "");
+          setCidade(data.localidade || "");
+          setBairro(data.bairro || "");
+          setUf(data.uf || "");
+          setIsValid(true);
+          localStorage.setItem("Cep", cep);
+          setNewAddress("Sim");
+        } else {
+          setLogradouro("");
+          setBairro("");
+          wrongCEP();
+          setNewAddress("Não");
+        }
+      })
+  }
 
   function onBlurCep(ev) {
     const { value } = ev.target;
@@ -67,7 +74,7 @@ function verficaCep(cep) {
       wrongCEP();
       return;
     }
-    verficaCep(cep);
+    verificaCep(cep);
   }
 
   function onSubmitForm(e) {
@@ -89,7 +96,7 @@ function verficaCep(cep) {
   }
 
   useEffect(() => {
-    // Para carregar os dados do localStorage
+    // Carregando os dados
     const storedData = localStorage.getItem("formData");
 
     if (storedData) {
@@ -104,19 +111,13 @@ function verficaCep(cep) {
       setNumero(parsedData.numero || "");
       setComplemento(parsedData.complemento || "");
     }
-  }, []);
+
+    // Reseta o estado formReset após renderizar
+    setFormReset(false);
+  }, [formReset]);
 
   return (
     <div className="FormCep">
-      {fetchError && (
-        <p className="errorMessage">
-          <strong>
-            Erro de conexãocom o servidor,
-            <br />
-            tente novamente mais tarde
-          </strong>
-        </p>
-      )}
       <form onSubmit={onSubmitForm}>
         <div className="two">
           <div className="container">
@@ -231,12 +232,12 @@ function verficaCep(cep) {
               <option value="SP">SP</option>
               <option value="SE">SE</option>
               <option value="TO">TO</option>
-            </select>
+              </select>
           </div>
         </div>
 
         <div>
-        <button onClick={limpar} type="reset">
+          <button onClick={limpar} type="reset">
             Reset
           </button>
           <button type="submit" disabled={!isValid || !numero}>
@@ -245,17 +246,11 @@ function verficaCep(cep) {
         </div>
       </form>
 
-      <div>
+      <div className="address">
         <h2>Endereços:</h2>
         <p>Nome Completo: {nomeCompleto}</p>
-        <p>Apelido: {apelido}</p>
-        <p>CEP: {}</p>
-        <p>Logradouro: {logradouro}</p>
-        <p>Bairro: {bairro}</p>
-        <p>Cidade: {cidade}</p>
-        <p>UF: {uf}</p>
-        <p>Número: {numero}</p>
-        <p>Complemento: {complemento}</p>
+        <p>CEP: {localStorage.getItem("Cep")}</p>
+        <p>Endereço novo: {newAddress}</p>
       </div>
     </div>
   );
